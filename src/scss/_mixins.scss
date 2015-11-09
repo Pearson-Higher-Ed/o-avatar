@@ -1,0 +1,13 @@
+////
+/// @group o-avatar
+/// @link https://origami.pearsoned.com/registry/components/o-avatar
+////
+
+/// Hello world
+///
+/// @param {String} $who [world]
+@mixin oAvatarHello($who: world) {
+	.foo {
+		content: 'Hello, #{$who}!';
+	}
+}
