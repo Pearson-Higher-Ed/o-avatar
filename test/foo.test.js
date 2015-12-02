@@ -1,12 +1,14 @@
 /*global describe, it*/
+// 'use strict';
 
-import expect from 'expect.js';
-import Foo from './../src/js/Foo';
+const expect = require('expect.js');
 
-describe('Foo', () => {
+const Avatar = require('../src/js/AvatarView');
 
-	it('should initialize', () => {
-		expect(new Foo().bar()).to.be('bar');
-	});
+describe('Avatar Init', function() {
+  it('should initialize', function() {
+    const prof = new Avatar();
+    expect(prof).to.not.be(null);
+  });
 
 });

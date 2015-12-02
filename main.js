@@ -1,1 +1,3 @@
-export { default } from './src/js/Foo';
+module.exports = {
+	AvatarView: require('./src/js/AvatarView')
+};
