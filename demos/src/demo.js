@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 	// make a new Avatar (Required)
-	AView = new AvatarView(url, token, document.getElementById("largeAvatar"), "100px", true);
+	AView = new AvatarView(url, token, document.getElementById("largeAvatar"), "200px", true);
 	console.log("new avatar")
 	// make another view (a small header like avatar) (optional)
 	AnotherView = new AvatarView(url, token, document.getElementById("smallAvatar"), "40px", false);

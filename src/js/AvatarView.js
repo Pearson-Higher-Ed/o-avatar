@@ -3,9 +3,9 @@
 const view = requireText("../html/AvatarView.html");
 const UProfileService = require("o-profile-service").UserProfileService;
 
-const updateMsg = 'Update Profile Picture'
+const updateMsg = 'Update Picture'
 const loadingMsg = 'Loading Picture'
-const noAvatarMsg = 'Choose an Avatar'
+const noAvatarMsg = 'Add A Picture'
 const unknownImage = "https://www.lariba.com/site/images/testimg/question.jpeg"
 const loadingImage = "http://www.colorado.edu/Sociology/gimenez/graphics/gears.gif"
 
@@ -16,6 +16,7 @@ function AvatarView(url, token,element, size, isEditable) {
 	this.elementlinks =[];
 	this.profileData = {};
 	this.myElement = element;
+	this.emptyPicture = true;
 
 	this.addAvatarView(size,isEditable);
 	return this;
@@ -31,24 +32,46 @@ AvatarView.prototype.addAvatarView = function ( size, isEditable) {
 	this.myElement.querySelector('.o-avatar_avatar-image').addEventListener('error', () => {
 		console.log('error loading avatar');
 		this.myElement.querySelector('.o-avatar_avatar-image').src = unknownImage;
-		this.myElement.querySelector('.o-avatar_avatar-msg-button').textContent = noAvatarMsg;
+		this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = noAvatarMsg;
 	});
 
 	this.myElement.querySelector(".o-avatar_avatar-msg-button").addEventListener("click", () => {
+		var elem =	this.myElement.querySelector(".o-avatar_avatar-update-choice");
+		if(this.emptyPicture){
+				this.myElement.querySelector(".o-avatar_avatar-edit-button").click();
+		}else{
+			if( elem.style.display=='block'){
+				elem.style.display='none';
+			}else{
+				elem.style.display ='block';
+			}
+		}
+		// this sends the click from the nice message button to the real button
+	});
+
+	// if avatar change button is pushed go to the input (which is hidden) and click that
+	this.myElement.querySelector(".o-avatar_avatar-update-change").addEventListener("click", () => {
 		this.myElement.querySelector(".o-avatar_avatar-edit-button").click();
 		// this sends the click from the nice message button to the real button
 	});
 
+	this.myElement.querySelector(".o-avatar_avatar-update-delete").addEventListener("click", () => {
+		this.removeAvatar();
+		this.myElement.querySelector(".o-avatar_avatar-update-choice").style.display='none';
+	});
+
 	this.myElement.querySelector(".o-avatar_avatar-edit-button").addEventListener("change", () => {
 		this.addAvatar();
+		this.myElement.querySelector(".o-avatar_avatar-update-choice").style.display='none';
 		// once the file is chosen this sets the avatar
 	});
 	console.log("size: "+ size)
-	this.myElement.querySelector('.o-avatar_detail-avatar').style.height =size;
-	this.myElement.querySelector('.o-avatar_detail-avatar').style.width = size;
+	this.myElement.querySelector('.o-avatar_avatar').style.height =size;
+	this.myElement.querySelector('.o-avatar_avatar').style.width = size;
 	console.log("isEditable: "+ isEditable);
 	if(isEditable === true){
 			this.myElement.querySelector('.o-avatar_avatar-msg-button').style.visibility="visible";
+				this.myElement.querySelector('.o-avatar_avatar-msg-button').style.width = size;
 	}else{
 			this.myElement.querySelector('.o-avatar_avatar-msg-button').style.visibility="hidden";
 	}
@@ -102,7 +125,15 @@ AvatarView.prototype.parseUserProfile = function (err, text) {
 
 	console.log('updating with avatar'+ pd.avatar);
 
-	this.myElement.querySelector('.o-avatar_avatar-image').src = pd.avatar || "Add an Avatar"
+	if(! pd.avatar || pd.avatar ==""){
+		this.myElement.querySelector('.o-avatar_avatar-msg-msg').text = noAvatarMsg;
+		this.emptyPicture = true;
+	}else{
+		this.myElement.querySelector('.o-avatar_avatar-msg-msg').text = updateMsg;
+		this.emptyPicture = false;
+	}
+
+	this.myElement.querySelector('.o-avatar_avatar-image').src = pd.avatar || noAvatarMsg;
 	// set all avatars on the page
 		// var avs =document.querySelectorAll('.o-avatar_avatar-image')
 		let i=0;
@@ -120,7 +151,7 @@ AvatarView.prototype.addAvatar = function () {
 	if (fileSelected.length > 0) {
 		console.log("my files" + fileSelected[0].name);
 
-		self.myElement.querySelector('.o-avatar_avatar-msg-button').textContent = loadingMsg;
+		self.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = loadingMsg;
 		self.myElement.querySelector(".o-avatar_avatar-image").src = loadingImage;
 
 		console.log('setting avatar in user profile')
@@ -130,7 +161,7 @@ AvatarView.prototype.addAvatar = function () {
 		// it could take a few seconds for the avatar to be availble for use.
 			setTimeout(function () {
 				self.parseUserProfile(err, txt);
-				self.myElement.querySelector('.o-avatar_avatar-msg-button').textContent = updateMsg;
+				self.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = updateMsg;
 			}, 2000);
 
 		});
@@ -138,6 +169,15 @@ AvatarView.prototype.addAvatar = function () {
 	}
 };
 
+// *******************
+AvatarView.prototype.removeAvatar = function () {
+	// get the latest userprofile
+	this.service.getProfile(this.profileData.id, this.parseUserProfile.bind(this));
+
+	this.profileData.avatar = null;
+console.log("profile data from remove avatar: "+  JSON.stringify(this.profileData));
+	this.service.setProfile(this.profileData.id,  JSON.stringify(this.profileData), this.parseUserProfile.bind(this));
+};
 
 
 module.exports = AvatarView;

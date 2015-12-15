@@ -5,35 +5,70 @@
 // Internal imports
 @import 'src/scss/variables';
 @import 'src/scss/mixins';
+@import 'o-icons/main';
+
+@include oIconsInclude(oc-icons);
 
 @if not $o-avatar-is-silent {
 	@include oAvatarHello(world of Origami);
 }
-.o-avatar_detail-avatar {
+
+
+.o-avatar_avatar {
 	width: 100px;
 	height: 100px;
+	font: 14px arial, sans-serif;
+}
+.o-avatar_clearfix{
+//	clear: both;
+	overflow: auto;
+}
+.o-avatar_detail-avatar {
 	border: solid 1px black;
 	position: relative;
 	overflow: hidden;
 	img {
 		width: 100%;
 		height: 100%;
+	
 	}
 }
 .o-avatar_avatar-msg-button {
 	background: rgba(0, 0, 0, 0.35);
 	color: white;
-	font: 10px arial, sans-serif;
+	// font: 10px arial, sans-serif;
 	position: absolute;
 	bottom: 0px;
 	left: 0px;
 	display: block;
-	height: 25px;
-	line-height: 25px;
+	height: 35px;
+	line-height: 35px;
 	text-align: center;
 	border: none 0px;
 }
 .o-avatar_avatar-edit-button {
 	display: none;
 
+}
+.o-avatar_avatar-update-choice {
+//	background: rgba(255, 255, 255, 1.00);
+
+	align-content: center;
+	align-self: center;
+	color: black;
+	width: 100px;
+	margin-top: 1px;
+	margin-left: auto;
+	margin-right: auto;
+	background: white;
+	padding: 10px;
+	border-radius: 6px;
+	// font: 12px arial, sans-serif;
+	display: none;
+	text-align: center;
+	border: blue 2px;
+	overflow: auto;
+	position: relative;
+	z-index: 10;
+	box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px ;
 }
