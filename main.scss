@@ -17,9 +17,9 @@
 .o-avatar_avatar {
 	width: 100px;
 	height: 100px;
-	font: 14px arial, sans-serif;
+	font: 16px arial, sans-serif;
 }
-.o-avatar_clearfix{
+.o-avatar_clearfix {
 //	clear: both;
 	overflow: auto;
 }
@@ -30,8 +30,19 @@
 	img {
 		width: 100%;
 		height: 100%;
-	
+		margin: 0px;
+		padding: 0px;
 	}
+	form {
+		display: none;
+	}
+	button {
+		margin: 0px;
+	}
+	input {
+		display: none;
+	}
+
 }
 .o-avatar_avatar-msg-button {
 	background: rgba(0, 0, 0, 0.35);
@@ -52,7 +63,7 @@
 }
 .o-avatar_avatar-update-choice {
 //	background: rgba(255, 255, 255, 1.00);
-
+ 	text-decoration: none;
 	align-content: center;
 	align-self: center;
 	color: black;
@@ -61,14 +72,57 @@
 	margin-left: auto;
 	margin-right: auto;
 	background: white;
-	padding: 10px;
+	padding: 1px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 5px;
 	border-radius: 6px;
 	// font: 12px arial, sans-serif;
 	display: none;
 	text-align: center;
-	border: blue 2px;
-	overflow: auto;
+	border-bottom: blue 2px;
+	overflow: visible;
 	position: relative;
 	z-index: 10;
-	box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px ;
+	box-shadow: rgba(0, 0, 0, 0.8) 3px 3px 3px 3px;
+}
+.o-arrow-up {
+	position: relative;
+	bottom: 20px;
+	left: 40px;
+	outline: 4px black;
+	width: 0;
+	height: 0;
+	border-left: 20px solid transparent;
+	border-right: 20px solid transparent;
+	border-bottom: 20px solid white;
+}
+
+
+.o-loader {
+  margin: auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-right: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-left: 1.1em solid #107aca;
+  transform: translateZ(0);
+  animation: load8 1.1s infinite linear;
+}
+.o-loader,
+.o-loader:after {
+  border-radius: 50%;
+  width: 10em;
+  height: 10em;
+}
+ 
+@keyframes load8 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
