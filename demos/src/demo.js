@@ -6,8 +6,8 @@ let AnotherView;
 document.addEventListener("DOMContentLoaded", function() {
 	// "use strict";
 	const token = document.getElementById('htmlToken').value;
-  const piid = document.getElementById('htmlPIid').value
-	const url = document.getElementById('htmlURL').value
+  const piid = document.getElementById('htmlPIid').value;
+	const url = document.getElementById('htmlURL').value;
 
 
 	// make a new Avatar (Required)

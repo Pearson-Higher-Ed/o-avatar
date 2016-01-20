@@ -185,7 +185,7 @@ AvatarView.prototype.addAvatar = function () {
 // *******************
 AvatarView.prototype.removeAvatar = function () {
 	// get the latest userprofile
-	this.service.getProfile(this.profileData.id, this.parseUserProfile.bind(this)); 
+	this.service.getProfile(this.profileData.id, this.parseUserProfile.bind(this));
 	this.profileData.avatar = null;
 	this.service.setProfile(this.profileData.id, JSON.stringify(this.profileData), this.parseUserProfile.bind(this));
 };
