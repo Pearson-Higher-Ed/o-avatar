@@ -1,6 +1,7 @@
 const AvatarView =require('../../main').AvatarView;
 let AView;
 let AnotherView;
+let JustSetTheAvatarViaUrl;
 
 // get Parameters
 document.addEventListener("DOMContentLoaded", function() {
@@ -23,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	// when you decide which user to get the avatar for set the Pi Id (Required)
 	AView.setUser(piid);
 
-
-
+	JustSetTheAvatarViaUrl = new AvatarView(null, null, document.getElementById("viaURLAvatar"), "80px", false);
+ 	JustSetTheAvatarViaUrl.setImageFromURL("https://lh3.googleusercontent.com/-4VTFFjbVzjg/U_FvEuEzXxI/AAAAAAAAQdM/bRFkdVYqFW8/s400/%255BUNSET%255D");
 	document.dispatchEvent(new CustomEvent('o.DOMContentLoaded'));
 });
