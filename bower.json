@@ -2,6 +2,7 @@
   "name": "o-avatar",
   "dependencies": {
       "o-profile-service": "~0.1.1",
+      "o-image-cropper": "~0.1.0",
       "o-icons": "~1.0.0"
   },
   "main": [

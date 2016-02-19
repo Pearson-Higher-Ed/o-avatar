@@ -5,6 +5,7 @@
 // Internal imports
 @import 'src/scss/variables';
 @import 'src/scss/mixins';
+@import 'o-image-cropper/main';
 @import 'o-icons/main';
 
 @include oIconsInclude(oc-icons);
@@ -63,6 +64,52 @@
 .o-avatar_avatar-edit-button {
 	display: none;
 
+}
+
+.o-avatar_editor-form {
+	position: absolute;
+	bottom: center;
+	left: 0px;
+	border: blue 10px;
+	width: 500px;
+	display: none;
+	margin-top: 12px;
+	background:  #5280FF;
+	padding: 12px;
+	// position: relative;
+	border-radius: 6px;
+	box-shadow: 10px 10px 10px grey;
+	z-index: 10;
+}
+
+.o-avatar_cropper-image {
+
+	//  height: 500px;
+}
+
+.o-avatar--cancel-edit {
+	float: left;
+
+}
+.o-avatar--submit-crop {
+	display: block;
+	width: 60px;
+	float: right;
+	border-radius: 3px;
+	padding: 6px 12px;
+	background: blue;
+	background-color: #0E67A9;
+	color: #FFF;
+	line-height: 1.42857;
+}
+
+.o-avatar_editor {
+	position: absolute;
+	bottom: center;
+	left: 0px;
+	border: blue 10px;
+	width: 500px;
+	height: 500px;
 }
 .o-avatar_avatar-update-choice {
 //	background: rgba(255, 255, 255, 1.00);

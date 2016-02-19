@@ -2,12 +2,13 @@
 
 const view = requireText("../html/AvatarView.html");
 const UProfileService = require("o-profile-service").UserProfileService;
+const ImageCropper =require('o-image-cropper').ImageCropper;
 
 const updateMsg = 'Update Picture'
 const loadingMsg = 'Loading Picture'
 const noAvatarMsg = 'Add A Picture'
-const unknownImage = "https://www.lariba.com/site/images/testimg/question.jpeg"
-
+const unknownImage = "https://console.pearson.com/images/e9458be08c02638f73609401880032e24f5bcba2/user.jpg"
+const CROPIMAGESIZE = 500;
 // *******************
 function AvatarView(url, token,element, size, isEditable) {
 	this.service = new UProfileService( url, token);
@@ -16,10 +17,18 @@ function AvatarView(url, token,element, size, isEditable) {
 	this.profileData = {};
 	this.myElement = element;
 	this.emptyPicture = true;
-
+	this.size = "500px";
+	this.crop = {};
+	this.imageCandidate = new Image();
 	this.addAvatarView(size,isEditable);
 	return this;
 }
+
+ AvatarView.prototype.handleOutsideBubbleclick = function( evt){
+	let elem =	this.myElement.querySelector(".o-avatar_avatar-update-choice");
+	elem.style.display ="none";
+}
+
 
 // *******************
 AvatarView.prototype.addAvatarView = function ( size, isEditable) {
@@ -33,15 +42,20 @@ AvatarView.prototype.addAvatarView = function ( size, isEditable) {
 		this.myElement.querySelector('.o-avatar_avatar-image').src = unknownImage;
 		this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = noAvatarMsg;
 	});
+
+
 	let elem =	this.myElement.querySelector(".o-avatar_avatar-update-choice");
-	this.myElement.querySelector(".o-avatar_avatar-msg-button").addEventListener("click", () => {
+	this.myElement.querySelector(".o-avatar_avatar-msg-button").addEventListener("click", (evt) => {
+		evt.stopPropagation();
 		if(this.emptyPicture){
 				this.myElement.querySelector(".o-avatar_avatar-edit-button").click();
 		}else{
 			if( elem.style.display==='block'){
 				elem.style.display='none';
+				document.body.removeEventListener("click",this.handleOutsideBubbleclick.bind(this) );
 			}else{
 				elem.style.display ='block';
+				document.body.addEventListener("click",this.handleOutsideBubbleclick.bind(this) );
 			}
 		}
 		// this sends the click from the nice message button to the real button
@@ -58,21 +72,29 @@ AvatarView.prototype.addAvatarView = function ( size, isEditable) {
 		this.myElement.querySelector(".o-avatar_avatar-update-choice").style.display='none';
 	});
 
+	this.myElement.querySelector(".o-avatar--cancel-edit").addEventListener("click", () => {
+		this.handleEditFormClear();
+	});
+
+	this.myElement.querySelector(".o-avatar--submit-crop").addEventListener("click", () => {
+		this.handleImageSave();
+
+	});
+
 	this.myElement.querySelector(".o-avatar_avatar-edit-button").addEventListener("change", () => {
-		this.addAvatar();
-		this.myElement.querySelector(".o-avatar_avatar-update-choice").style.display='none';
+		this.handleEditPicture();
 		// once the file is chosen this sets the avatar
 	});
-	console.log("size: "+ Math.floor((parseInt(size) )) +"px")
 	this.myElement.querySelector('.o-avatar_avatar').style.height = size;
 	this.myElement.querySelector('.o-avatar_avatar').style.width = size;
 	this.myElement.querySelector('.o-loader').style.width = Math.floor((parseInt(size)*.9 )) +"px";
 	this.myElement.querySelector('.o-loader').style.height =Math.floor((parseInt(size)*.9 )) +"px";
-	console.log("isEditable: "+ isEditable);
 	if(isEditable === true){
 			this.myElement.querySelector('.o-avatar_avatar-msg-button').style.display="block";
 			this.myElement.querySelector('.o-avatar_avatar-msg-button').style.width = size;
 			this.myElement.querySelector('.o-avatar_avatar-update-choice').style.width = size;
+			this.myElement.querySelector('.o-avatar_editor-form').style.display = 'none';
+
 	}else{
 			this.myElement.querySelector('.o-avatar_avatar-msg-button').style.display="none";
 	}
@@ -138,48 +160,79 @@ AvatarView.prototype.parseUserProfile = function (err, text) {
 		this.emptyPicture = false;
 	}
 
-	this.myElement.querySelector('.o-avatar_avatar-image').src = pd.avatar || noAvatarMsg;
+	this.setImageFromURL(pd.avatar);
 	// set all avatars on the page
-		// var avs =document.querySelectorAll('.o-avatar_avatar-image')
+
 		let i=0;
 		for(i =0; i < this.elementlinks.length; i++){
-				console.log("updating some other link: " + this.elementlinks[i].myElement.querySelector('.o-avatar_avatar-image').src);
-				this.elementlinks[i].myElement.querySelector('.o-avatar_avatar-image').src = pd.avatar || "Add an Avatar";
-			};
+			this.elementlinks[i].setImageFromURL(pd.avatar);
+		};
 
 };
 
 // *******************
+AvatarView.prototype.setImageFromURL = function ( image) {
+	let img =this.myElement.querySelector('.o-avatar_avatar-image');
+	let size = parseInt(	this.myElement.querySelector('.o-avatar_avatar').style.height);
+
+	img.src = image || noAvatarMsg;
+	// if(img.width > this.size){img.width = this.size;	}
+
+	let img2 =this.myElement.querySelector('.o-avatar_avatar-image');
+		// console.log(" old dimensions: ",		img2.width , 	img2.height );
+	if(img2.width > size){
+		img.style.height = Math.floor(size* img2.height / img2.width)+"px";
+		img.style.width = size + "px";
+	}
+	if(img2.height > size){
+		img.style.width = Math.floor(size* img2.width / img2.height)+"px";
+		img.style.height = size + "px";
+	}
+
+	// console.log(" new dimensions: ",		img.style.width , 	img.style.height );
+}
+// *******************
 AvatarView.prototype.addAvatar = function () {
 	const self = this;
-	const fileSelected = self.myElement.querySelector(".o-avatar_avatar-edit-button").files;
-	if (fileSelected.length > 0) {
-		console.log("my files" + fileSelected[0].name);
+	const fileSelected = this.myElement.querySelector(".o-avatar_avatar-edit-button").files;
+	if (fileSelected.length != 1) {
+		console.log("chose only one file");
+		return;
+	}
+	console.log("my files" + fileSelected[0].name);
+	this.triggerLoadingDisplay();
 
-		self.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = loadingMsg;
-		self.myElement.querySelector(".o-avatar_avatar-image").src = '';
+	this.service.setAvatar(this.profileData.id, fileSelected[0], function (err, txt) {
+		self.waitThenUpdateDisplay(err, txt);
+	});
+};
 
-		self.myElement.querySelector('.o-loader').style.display = 'block';
+AvatarView.prototype.triggerLoadingDisplay = function () {
+
+		this.myElement.querySelector(".o-avatar_avatar-update-choice").style.display = 'none';
+		this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = loadingMsg;
+		this.myElement.querySelector(".o-avatar_avatar-image").src = '';
+
+		this.myElement.querySelector('.o-loader').style.display = 'block';
 
 		console.log('setting avatar in user profile')
-		this.service.setAvatar(this.profileData.id, fileSelected[0], function (err, txt) {
-			if(err !== null){
-				console.log("an error has occured in setting the avatar: "+ err.responseText);
-				// don't return here.  if invalid token then just put up blank avatar
-			}
+};
 
-		console.log("I have received a response from avatar, I will wait a couple of seconds before using it")
-		// the avatar is not necessarily availble as soon as the response comes back from user Profile
-		// it could take a few seconds for the avatar to be availble for use.
-			setTimeout(function () {
-				self.parseUserProfile(err, txt);
-				self.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = updateMsg;
-				self.myElement.querySelector('.o-loader').style.display = 'none';
-			}, 2000);
-
-		});
-
+AvatarView.prototype.waitThenUpdateDisplay = function (err, txt) {
+	let self = this;
+	if(err !== null){
+		console.log("an error has occured in setting the avatar: "+ err.responseText);
+		// don't return here.  if invalid token then just put up blank avatar
 	}
+
+	console.log("I have received a response from avatar, I will wait a couple of seconds before using it")
+	// the avatar is not necessarily availble as soon as the response comes back from user Profile
+	// it could take a few seconds for the avatar to be availble for use.
+	setTimeout(function () {
+		self.parseUserProfile(err, txt);
+		self.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = updateMsg;
+		self.myElement.querySelector('.o-loader').style.display = 'none';
+	}, 2000);
 };
 
 // *******************
@@ -190,5 +243,126 @@ AvatarView.prototype.removeAvatar = function () {
 	this.service.setProfile(this.profileData.id, JSON.stringify(this.profileData), this.parseUserProfile.bind(this));
 };
 
+// *******************
+AvatarView.prototype.handleEditPicture = function () {
+	// dont show the avatar, only show the cropping tool
+	this.myElement.querySelector('.o-avatar_detail-avatar').style.display = 'none';
+	const self = this;
+ // 	this.addAvatar();
+	const fileSelected = self.myElement.querySelector(".o-avatar_avatar-edit-button").files;
+	if (fileSelected.length != 1) {
+		console.log("chose only one file");
+		this.handleEditFormClear();
+		return;
+	}
+	console.log("loading file: " + fileSelected[0].name);
+
+	// load the file into a imageCandidate and attach the cropper ui
+	var reader = new FileReader();
+	self.imageCandidate = 	new Image();
+	self.imageCandidate.setAttribute("class", "o-avatar_cropper-image");
+	self.imageCandidate.style.height = CROPIMAGESIZE+"px";
+
+	reader.onload = function(e) {
+
+		self.imageCandidate.onload = function () {
+
+			console.log("loaded image to cropper width, height: ",self.imageCandidateWidth, self.imageCandidateHeight);
+			new ImageCropper(this, {
+				ratio: {width: 1, height: 1},
+				update: function (cropBox) {
+					self.crop = cropBox;
+				}
+			});
+			self.myElement.querySelector('.o-avatar_editor-form').style.width = this.width + "px";
+			self.myElement.querySelector('.o-avatar_editor-form').style.height = (this.height+95) + "px";
+
+		};// end onload
+		self.imageCandidate.src = e.target.result;
+		self.myElement.querySelector(".o-avatar_editor-cropper-frame").appendChild(self.imageCandidate);
+
+		self.myElement.querySelector('.o-avatar_editor-form').style.display = 'block';
+		self.crop = {};// clear off cropping data for next time
+		}
+	reader.readAsDataURL(fileSelected[0]);
+};
+
+
+// *******************
+// triggered by form save
+AvatarView.prototype.handleImageSave = function () {
+	this.triggerLoadingDisplay();
+	// crop needs to be rescaled from displayed image size (reflected in crop data)   to actual image coordinates
+
+	let naturalWidth = this.imageCandidate.naturalWidth;
+	let naturalHeight = this.imageCandidate.naturalHeight;
+
+	let windowWidth = this.imageCandidate.width;
+	let windowHeight = this.imageCandidate.height;
+
+	let scalingFactorX = naturalWidth/windowWidth;
+	let scalingFactorY = naturalHeight/windowHeight;  // if everything is right these should match
+
+	if(! (this.crop.width > 0) ){
+		console.log("crop not set",windowWidth,windowHeight);
+
+		if(windowWidth>windowHeight){
+			this.crop.x = (windowWidth - windowHeight)/2; // center the crop
+			this.crop.y = 0;
+			this.crop.width = windowHeight;
+			this.crop.height = windowHeight;
+			console.log("width / height",	 (windowWidth - windowHeight),	windowHeight);
+
+		}else{
+			this.crop.x = 0;
+			this.crop.y = (windowHeight - windowWidth)/2; // center the crop;
+			this.crop.width = windowWidth;
+			this.crop.height = windowWidth;
+		}
+	}
+	let cropX =  this.crop.x * scalingFactorX;
+	let cropY =  this.crop.y * scalingFactorY;
+	let width = this.crop.width * scalingFactorX;
+	let height = this.crop.height * scalingFactorY;
+
+	this.saveCroppedImage(this.imageCandidate, cropX,cropY, width, height);
+	this.handleEditFormClear();
+};
+
+// *******************
+// triggered by form save
+AvatarView.prototype.handleEditFormClear = function () {
+	// show the avatar, but not the cropping tool
+	this.myElement.querySelector('.o-avatar_detail-avatar').style.display = 'block';
+	var myNode = this.myElement.querySelector(".o-avatar_editor-cropper-frame");
+	while (myNode.firstChild) {
+    myNode.removeChild(myNode.firstChild);
+}
+	this.myElement.querySelector(".o-avatar_editor-form").style.display = 'none';
+};
+
+
+// *******************
+// file: file with picture in it
+// x1, y1 coords of one crop corner  (in natural or full image size coordinates)
+// width and height give box size
+AvatarView.prototype.saveCroppedImage = function (imageToSave, x1, y1, width, height) {
+	const self = this;
+
+	var canvas = document.createElement('canvas');
+	canvas.style.display = 'none';
+	var ctx = canvas.getContext("2d");
+
+	canvas.width=width/height*canvas.height;
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.drawImage(imageToSave,
+			x1, y1, width,    height,    // source rectangle
+			0, 0, canvas.width, canvas.height);
+	canvas.toBlob(function(blob){
+		self.service.setAvatar(self.profileData.id, blob, function (err, txt) {
+			self.waitThenUpdateDisplay(err, txt);
+		});
+	},"image/png");
+};
 
 module.exports = AvatarView;
