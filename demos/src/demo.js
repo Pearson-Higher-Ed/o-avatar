@@ -6,10 +6,18 @@ let JustSetTheAvatarViaUrl;
 // get Parameters
 document.addEventListener("DOMContentLoaded", function() {
 	// "use strict";
-	const token = document.getElementById('htmlToken').value;
-  const piid = document.getElementById('htmlPIid').value;
-	const url = document.getElementById('htmlURL').value;
+	let token = document.getElementById('htmlToken').value;
+  let piid = document.getElementById('htmlPIid').value;
+	let url = document.getElementById('htmlURL').value;
 
+	document.getElementById("refreshButton").addEventListener("click", () => {
+		token = document.getElementById('htmlToken').value;
+	  piid = document.getElementById('htmlPIid').value;
+
+		AView.setToken(token);
+		AView.setUser(piid);
+
+	});
 
 	// make a new Avatar (Required)
 	AView = new AvatarView(url, token, document.getElementById("largeAvatar"), "160px", true);
@@ -28,3 +36,8 @@ document.addEventListener("DOMContentLoaded", function() {
  	JustSetTheAvatarViaUrl.setImageFromURL("https://lh3.googleusercontent.com/-4VTFFjbVzjg/U_FvEuEzXxI/AAAAAAAAQdM/bRFkdVYqFW8/s400/%255BUNSET%255D");
 	document.dispatchEvent(new CustomEvent('o.DOMContentLoaded'));
 });
+
+function refreshDemoData() {
+	console.log("Hello world");
+	return true;
+};

@@ -9,6 +9,35 @@ const loadingMsg = 'Loading Picture'
 const noAvatarMsg = 'Add A Picture'
 const unknownImage = "https://console.pearson.com/images/e9458be08c02638f73609401880032e24f5bcba2/user.jpg"
 const CROPIMAGESIZE = 500;
+
+
+// shim to define toBlob for browsers that don't have it
+if( !HTMLCanvasElement.prototype.toBlob ) {
+    Object.defineProperty( HTMLCanvasElement.prototype, 'toBlob', {
+        value: function( callback, type, quality ) {
+            const bin = atob( this.toDataURL( type, quality ).split(',')[1] ),
+                  len = bin.length,
+                  len32 = len >> 2,
+                  a8 = new Uint8Array( len ),
+                  a32 = new Uint32Array( a8.buffer, 0, len32 );
+
+            for( var i=0, j=0; i < len32; i++ ) {
+                a32[i] = bin.charCodeAt(j++)  |
+                    bin.charCodeAt(j++) << 8  |
+                    bin.charCodeAt(j++) << 16 |
+                    bin.charCodeAt(j++) << 24;
+            }
+
+            let tailLength = len & 3;
+
+            while( tailLength-- ) {
+                a8[ j ] = bin.charCodeAt(j++);
+            }
+
+            callback( new Blob( [a8], {'type': type || 'image/png'} ) );
+        }
+    });
+}
 // *******************
 function AvatarView(url, token,element, size, isEditable) {
 	this.service = new UProfileService( url, token);
@@ -37,8 +66,7 @@ AvatarView.prototype.addAvatarView = function ( size, isEditable) {
 
 	this.myElement.appendChild(container);
 
-	this.myElement.querySelector('.o-avatar_avatar-image').addEventListener('error', () => {
-		console.log('error loading avatar');
+	this.myElement.querySelector('.o-avatar_avatar-image').addEventListener('error', () => { 
 		this.myElement.querySelector('.o-avatar_avatar-image').src = unknownImage;
 		this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = noAvatarMsg;
 	});
@@ -153,10 +181,11 @@ AvatarView.prototype.parseUserProfile = function (err, text) {
 	// console.log('updating with avatar'+ pd.avatar);
 
 	if(!pd || ! pd.avatar || pd.avatar ===""){
-		this.myElement.querySelector('.o-avatar_avatar-msg-msg').text = noAvatarMsg;
+		this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = noAvatarMsg;
 		this.emptyPicture = true;
 	}else{
 		this.myElement.querySelector('.o-avatar_avatar-msg-msg').text = updateMsg;
+		this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = updateMsg;
 		this.emptyPicture = false;
 	}
 
@@ -230,7 +259,6 @@ AvatarView.prototype.waitThenUpdateDisplay = function (err, txt) {
 	// it could take a few seconds for the avatar to be availble for use.
 	setTimeout(function () {
 		self.parseUserProfile(err, txt);
-		self.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = updateMsg;
 		self.myElement.querySelector('.o-loader').style.display = 'none';
 	}, 2000);
 };

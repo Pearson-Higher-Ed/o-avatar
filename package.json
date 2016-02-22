@@ -1,6 +1,6 @@
 {
   "name": "o-avatar",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
   "scripts": {
     "test": "./node_modules/karma/bin/karma start karma.conf.js"
@@ -22,5 +22,8 @@
     "mocha": "^2.1.0",
     "sinon": "^1.17.1",
     "webpack": "^1.12.2"
+  },
+  "dependencies": {
+    "pearson-elements": "^0.1.2"
   }
 }
