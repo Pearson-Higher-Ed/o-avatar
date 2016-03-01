@@ -9,6 +9,8 @@ const loadingMsg = 'Loading Picture'
 const noAvatarMsg = 'Add A Picture'
 const unknownImage = "https://console.pearson.com/images/e9458be08c02638f73609401880032e24f5bcba2/user.jpg"
 const CROPIMAGESIZE = 500;
+const EDITORFORMPADFORBUTTONSHEIGHT = 85;
+const EDITORFORMPADFORBUTTONSWIDTH = 25;
 
 
 // shim to define toBlob for browsers that don't have it
@@ -66,7 +68,7 @@ AvatarView.prototype.addAvatarView = function ( size, isEditable) {
 
 	this.myElement.appendChild(container);
 
-	this.myElement.querySelector('.o-avatar_avatar-image').addEventListener('error', () => { 
+	this.myElement.querySelector('.o-avatar_avatar-image').addEventListener('error', () => {
 		this.myElement.querySelector('.o-avatar_avatar-image').src = unknownImage;
 		this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = noAvatarMsg;
 	});
@@ -179,21 +181,14 @@ AvatarView.prototype.parseUserProfile = function (err, text) {
 	const pd = this.profileData;
 
 	// console.log('updating with avatar'+ pd.avatar);
-
-	if(!pd || ! pd.avatar || pd.avatar ===""){
-		this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = noAvatarMsg;
-		this.emptyPicture = true;
-	}else{
-		this.myElement.querySelector('.o-avatar_avatar-msg-msg').text = updateMsg;
-		this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = updateMsg;
-		this.emptyPicture = false;
-	}
+	this.setBannerText(pd.avatar);
 
 	this.setImageFromURL(pd.avatar);
 	// set all avatars on the page
 
 		let i=0;
 		for(i =0; i < this.elementlinks.length; i++){
+			this.elementlinks[i].setBannerText(pd.avatar);
 			this.elementlinks[i].setImageFromURL(pd.avatar);
 		};
 
@@ -220,6 +215,20 @@ AvatarView.prototype.setImageFromURL = function ( image) {
 
 	// console.log(" new dimensions: ",		img.style.width , 	img.style.height );
 }
+
+// *******************
+AvatarView.prototype.setBannerText = function ( image) {
+
+		if( ! image || image ===""){
+			this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = noAvatarMsg;
+			this.emptyPicture = true;
+		}else{
+			// this.myElement.querySelector('.o-avatar_avatar-msg-msg').text = updateMsg;
+			this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = updateMsg;
+			this.emptyPicture = false;
+		}
+}
+
 // *******************
 AvatarView.prototype.addAvatar = function () {
 	const self = this;
@@ -296,14 +305,29 @@ AvatarView.prototype.handleEditPicture = function () {
 		self.imageCandidate.onload = function () {
 
 			console.log("loaded image to cropper width, height: ",self.imageCandidateWidth, self.imageCandidateHeight);
-			new ImageCropper(this, {
+			let cropper = new ImageCropper(this, {
+				// min_width: 10,
+				// min_height: 10,
+				one_box: true,
 				ratio: {width: 1, height: 1},
 				update: function (cropBox) {
 					self.crop = cropBox;
 				}
 			});
-			self.myElement.querySelector('.o-avatar_editor-form').style.width = this.width + "px";
-			self.myElement.querySelector('.o-avatar_editor-form').style.height = (this.height+95) + "px";
+			// cropper.coordinates = {x: 50, y: 50, width: 100, height: 100};
+			let initialCropBoxSize = Math.min(self.imageCandidate.width, self.imageCandidate.height)/2;
+			cropper.createCropArea(  {
+				x: (self.imageCandidate.width - initialCropBoxSize)/2,
+				y: (self.imageCandidate.height - initialCropBoxSize)/2,
+				width: initialCropBoxSize,
+				height: initialCropBoxSize
+			});
+
+			cropper.confine();
+			cropper.crop();
+
+			self.myElement.querySelector('.o-avatar_editor-form').style.width = this.width+EDITORFORMPADFORBUTTONSWIDTH + "px";
+			self.myElement.querySelector('.o-avatar_editor-form').style.height = (this.height+EDITORFORMPADFORBUTTONSHEIGHT) + "px";
 
 		};// end onload
 		self.imageCandidate.src = e.target.result;
@@ -311,7 +335,7 @@ AvatarView.prototype.handleEditPicture = function () {
 
 		self.myElement.querySelector('.o-avatar_editor-form').style.display = 'block';
 		self.crop = {};// clear off cropping data for next time
-		}
+	};
 	reader.readAsDataURL(fileSelected[0]);
 };
 

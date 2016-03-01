@@ -3,17 +3,19 @@
 // @import 'o-grid/main';
 
 // Internal imports
+
+
 @import 'src/scss/variables';
 @import 'src/scss/mixins';
 @import 'o-image-cropper/main';
 @import 'o-icons/main';
+@import 'node_modules/pearson-elements/scss/elements';
 
 @include oIconsInclude(oc-icons);
 
 @if not $o-avatar-is-silent {
 	@include oAvatarHello(world of Origami);
 }
-
 
 .o-avatar_avatar {
 	width: 100px;
@@ -68,13 +70,12 @@
 
 .o-avatar_editor-form {
 	position: absolute;
-	bottom: center;
 	left: 0px;
 	border: blue 10px;
 	width: 500px;
 	display: none;
 	margin-top: 12px;
-	background:  #5280FF;
+	background:  pe-color(black);
 	padding: 12px;
 	// position: relative;
 	border-radius: 6px;
@@ -88,18 +89,23 @@
 }
 
 .o-avatar--cancel-edit {
-	float: left;
+	position: absolute;
+  bottom: 8px;
+	left: 20px;
 
 }
 .o-avatar--submit-crop {
-	display: block;
-	width: 60px;
-	float: right;
-	border-radius: 3px;
-	padding: 6px 12px;
-	background: blue;
-	background-color: #0E67A9;
-	color: #FFF;
+	// display: block;
+	// width: 60px;
+
+	position: absolute;
+  bottom: 8px;
+	right: 20px;
+	// border-radius: 3px;
+	// padding: 6px 12px;
+	// background: blue;
+	// background-color: #0E67A9;
+	// color: #FFF;
 	line-height: 1.42857;
 }
 
