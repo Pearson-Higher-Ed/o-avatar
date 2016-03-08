@@ -2,12 +2,14 @@
 
   <div class="o-avatar_editor-form">
     <div class="o-avatar_editor-cropper-message">
-      <h4>Drag to select an area to be your picture</h4>
+      <h4 class="o-localizable">avatar.frame.explain</h4>
     </div>
     <div class="o-avatar_editor-cropper-frame">
     </div>
-    <a href="#" class="o-avatar--cancel-edit pe-btn pe-btn--link pe-btn--large">Cancel</a>
-    <input type="submit" name="submit" value="Save" class="o-avatar--submit-crop pe-btn pe-btn--primary" />
+    <a href="#" class="o-localizable o-avatar--cancel-edit pe-btn pe-btn--link pe-btn--large">avatar.frame.cancel</a>
+    <div type="submit" name="submit" class="o-localizable o-avatar--submit-crop pe-btn pe-btn--primary" >
+      avatar.save
+    </div>
 
     <div class="o-profile--clearfix"></div>
   </div>
@@ -21,8 +23,8 @@
       src="https://console.pearson.com/images/e9458be08c02638f73609401880032e24f5bcba2/user.jpg"  />
     <button  class="o-avatar_avatar-msg-button" type="button">
       <i class="oc-icon-camera" style="font-size: 16px;"></i>
-      <span class="o-avatar_avatar-msg-msg">
-        Update Profile Picture
+      <span class="o-localizable o-avatar_avatar-msg-msg">
+        avatar.update
       </span>
     </button>
     <div >
@@ -33,11 +35,11 @@
     <div class="o-arrow-up"></div>
     <div class='o-avatar_avatar-update-change' >
           <a href="#" style="text-decoration:none; color:blue;"
-          class="o-avatar_avatar-update-change-link">Change Picture</a>
+          class="o-localizable o-avatar_avatar-update-change-link">avatar.change.picture</a>
     </div>
     <div class='o-avatar_avatar-update-delete'>
           <a href="#" style="text-decoration:none; color:blue;"
-          class="o-avatar_avatar-update-delete-link">Remove Picture</a>
+          class="o-localizable o-avatar_avatar-update-delete-link">avatar.remove.picture</a>
     </div>
     <div class="o-avatar_clearfix"></div>
   </form>

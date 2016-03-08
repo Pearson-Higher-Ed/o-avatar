@@ -1,0 +1,42 @@
+{
+  "english":{
+    "avatar.update":"Update Avatar",
+    "avatar.loading":"Loading Avatar",
+    "avatar.new":"Add A Picture",
+    "avatar.save":"Save",
+    "avatar.change.picture":"Change Picture",
+    "avatar.remove.picture":"Remove Picture",
+    "avatar.frame.explain":"Drag to select an area to be your picture",
+    "avatar.frame.cancel":"Cancel"
+  },
+  "piglatin":{
+    "avatar.update":"dateupay ataravay",
+    "avatar.loading":"odinglay ataravay",
+    "avatar.new":"aday icturay",
+    "avatar.save":"avesay",
+    "avatar.change.picture":"angekay icturepay",
+    "avatar.remove.picture":"moverey icturepay",
+    "avatar.frame.explain":"agdray ufstay",
+    "avatar.frame.cancel":"anselcay"
+  },
+  "french":{
+    "avatar.update":"Mise à jour Avatar",
+    "avatar.loading":"Chargement Avatar",
+    "avatar.new":"Ajouter une photo",
+    "avatar.save":"sauvegarder",
+    "avatar.change.picture":"Changer l'image",
+    "avatar.remove.picture":"Supprimer l'image",
+    "avatar.frame.explain":"Faites glisser pour sélectionner une zone à votre image",
+    "avatar.frame.cancel":"Annuler"
+  },
+  "chinese":{
+    "avatar.update":"更新圖片",
+    "avatar.loading":"加載圖片",
+    "avatar.new":"添加圖片",
+    "avatar.save":"保存",
+    "avatar.change.picture":"更改圖片",
+    "avatar.remove.picture":"刪除圖片",
+    "avatar.frame.explain":"拖動選擇一個區域成為你的圖片",
+    "avatar.frame.cancel":"取消"
+  }
+}

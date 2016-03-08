@@ -1,12 +1,11 @@
 // "use strict";
 
 const view = requireText("../html/AvatarView.html");
+const translation = requireText("../translation/translations.json");
 const UProfileService = require("o-profile-service").UserProfileService;
 const ImageCropper =require('o-image-cropper').ImageCropper;
 
-const updateMsg = 'Update Picture'
-const loadingMsg = 'Loading Picture'
-const noAvatarMsg = 'Add A Picture'
+
 const unknownImage = "https://console.pearson.com/images/e9458be08c02638f73609401880032e24f5bcba2/user.jpg"
 const CROPIMAGESIZE = 500;
 const EDITORFORMPADFORBUTTONSHEIGHT = 85;
@@ -41,7 +40,14 @@ if( !HTMLCanvasElement.prototype.toBlob ) {
     });
 }
 // *******************
-function AvatarView(url, token,element, size, isEditable) {
+function AvatarView(url, token,element, size, isEditable, language) {
+
+  this.translator = new Translator(language);
+
+  this.noAvatarMsg =   this.translator.translate('avatar.new');
+  this.updateMsg =  this.translator.translate('avatar.update');
+  this.loadingMsg = this.translator.translate('avatar.loading');
+
 	this.service = new UProfileService( url, token);
 
 	this.elementlinks =[];
@@ -52,6 +58,9 @@ function AvatarView(url, token,element, size, isEditable) {
 	this.crop = {};
 	this.imageCandidate = new Image();
 	this.addAvatarView(size,isEditable);
+
+  this.element = this.translator.translateHTML(element);
+
 	return this;
 }
 
@@ -70,7 +79,7 @@ AvatarView.prototype.addAvatarView = function ( size, isEditable) {
 
 	this.myElement.querySelector('.o-avatar_avatar-image').addEventListener('error', () => {
 		this.myElement.querySelector('.o-avatar_avatar-image').src = unknownImage;
-		this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = noAvatarMsg;
+		this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = this.noAvatarMsg;
 	});
 
 
@@ -199,7 +208,7 @@ AvatarView.prototype.setImageFromURL = function ( image) {
 	let img =this.myElement.querySelector('.o-avatar_avatar-image');
 	let size = parseInt(	this.myElement.querySelector('.o-avatar_avatar').style.height);
 
-	img.src = image || noAvatarMsg;
+	img.src = image || this.noAvatarMsg;
 	// if(img.width > this.size){img.width = this.size;	}
 
 	let img2 =this.myElement.querySelector('.o-avatar_avatar-image');
@@ -220,11 +229,11 @@ AvatarView.prototype.setImageFromURL = function ( image) {
 AvatarView.prototype.setBannerText = function ( image) {
 
 		if( ! image || image ===""){
-			this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = noAvatarMsg;
+			this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = this.noAvatarMsg;
 			this.emptyPicture = true;
 		}else{
-			// this.myElement.querySelector('.o-avatar_avatar-msg-msg').text = updateMsg;
-			this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = updateMsg;
+			// this.myElement.querySelector('.o-avatar_avatar-msg-msg').text = this.updateMsg;
+			this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = this.updateMsg;
 			this.emptyPicture = false;
 		}
 }
@@ -248,7 +257,7 @@ AvatarView.prototype.addAvatar = function () {
 AvatarView.prototype.triggerLoadingDisplay = function () {
 
 		this.myElement.querySelector(".o-avatar_avatar-update-choice").style.display = 'none';
-		this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = loadingMsg;
+		this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = this.loadingMsg;
 		this.myElement.querySelector(".o-avatar_avatar-image").src = '';
 
 		this.myElement.querySelector('.o-loader').style.display = 'block';
@@ -417,4 +426,40 @@ AvatarView.prototype.saveCroppedImage = function (imageToSave, x1, y1, width, he
 	},"image/png");
 };
 
+// *************************************
+function Translator(locale) {
+  console.log("in translator")
+  this.locale = locale;
+  let datafile = JSON.parse( translation);
+  if(! this.locale){
+      console.log('no localization chosen choose english as default');
+      this.translation = datafile["english"];
+  }else{
+    this.translation = datafile[this.locale];
+  }
+  if(! this.translation){
+      this.translation = datafile["english"];
+  }
+  console.log("translation file", JSON.stringify(this.translation ));
+	return this;
+};
+
+Translator.prototype.translate= function(tag) {
+  let phrase = this.translation[tag.trim()];
+  if(!phrase){
+    console.log("translator: can not translate: ", tag);
+    phrase = tag;
+  };
+  return phrase;
+};
+
+Translator.prototype.translateHTML= function(element) {
+	let elems =	element.querySelectorAll(".o-localizable");
+  let i=0;
+  for(i =0; i < elems.length; i++){
+    // console.log("translate localization",  elems[i].innerHTML);
+    elems[i].innerHTML = this.translate(elems[i].innerHTML);
+    // console.log("translated to",  elems[i].innerHTML);
+  };
+};
 module.exports = AvatarView;

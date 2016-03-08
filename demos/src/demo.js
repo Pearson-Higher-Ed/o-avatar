@@ -1,5 +1,6 @@
 const AvatarView =require('../../main').AvatarView;
 let AView;
+let CView;
 let AnotherView;
 let JustSetTheAvatarViaUrl;
 
@@ -16,11 +17,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		AView.setToken(token);
 		AView.setUser(piid);
-
 	});
 
 	// make a new Avatar (Required)
-	AView = new AvatarView(url, token, document.getElementById("largeAvatar"), "160px", true);
+	AView = new AvatarView(url, token, document.getElementById("largeAvatar"), "160px", true, "english");
 	console.log("new avatar")
 	// make another view (a small header like avatar) (optional)
 	AnotherView = new AvatarView(url, token, document.getElementById("smallAvatar"), "40px", false);
@@ -29,9 +29,16 @@ document.addEventListener("DOMContentLoaded", function() {
 	// on update of the first one (optional)
 	AView.linkAvatarView(AnotherView);
 
+	// an avatar in chinese for good measure
+	CView = new AvatarView(url, token, document.getElementById("chineseAvatar"), "200px", true, "chinese");
+	// the odd circumstance where we have two avatar editors linked together on the same page
+	AView.linkAvatarView(CView);
+	CView.linkAvatarView(AView);
+
+
 	// when you decide which user to get the avatar for set the Pi Id (Required)
 	AView.setUser(piid);
-
+	CView.setUser(piid);
 	JustSetTheAvatarViaUrl = new AvatarView(null, null, document.getElementById("viaURLAvatar"), "80px", false);
  	JustSetTheAvatarViaUrl.setImageFromURL("https://lh3.googleusercontent.com/-4VTFFjbVzjg/U_FvEuEzXxI/AAAAAAAAQdM/bRFkdVYqFW8/s400/%255BUNSET%255D");
 	document.dispatchEvent(new CustomEvent('o.DOMContentLoaded'));
