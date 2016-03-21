@@ -40,7 +40,7 @@ if( !HTMLCanvasElement.prototype.toBlob ) {
     });
 }
 // *******************
-function AvatarView(url, token,element, size, isEditable, language) {
+function AvatarView( service,element, size, isEditable, language) {
 
   this.translator = new Translator(language);
 
@@ -48,7 +48,7 @@ function AvatarView(url, token,element, size, isEditable, language) {
   this.updateMsg =  this.translator.translate('avatar.update');
   this.loadingMsg = this.translator.translate('avatar.loading');
 
-	this.service = new UProfileService( url, token);
+	this.service = service;
 
 	this.elementlinks =[];
 	this.profileData = {};
@@ -166,11 +166,6 @@ AvatarView.prototype.setUser = function (id) {
 // *******************
 AvatarView.prototype.updateAvatar = function (id, data) {
 	this.service.setProfile(id, data, this.parseUserProfile.bind(this));
-};
-
-// *******************
-AvatarView.prototype.setToken = function (token) {
-	this.service.token = token;
 };
 
 // *******************
