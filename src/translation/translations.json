@@ -1,13 +1,18 @@
 {
   "english":{
-    "avatar.update":"Update Avatar",
-    "avatar.loading":"Loading Avatar",
-    "avatar.new":"Add A Picture",
+    "avatar.update":"Update Photo",
+    "avatar.loading":"Loading Photo",
+    "avatar.new":"Add A Photo",
     "avatar.save":"Save",
-    "avatar.change.picture":"Change Picture",
-    "avatar.remove.picture":"Remove Picture",
-    "avatar.frame.explain":"Drag to select an area to be your picture",
+    "avatar.change.picture":"Upload Photo",
+    "avatar.remove.picture":"Remove Photo",
+    "avatar.frame.explain":"Nice photo!  Now use the photo editing tools to add that final touch.",
+    "avatar.frame.title":"Edit Photo",
+    "avatar.frame.delete.title":"Delete Photo?",
+    "avatar.frame.delete.explain":"Are you sure you want to permanently delete this photo?",
+    "avatar.delete":"Delete",
     "avatar.frame.cancel":"Cancel"
+
   },
   "piglatin":{
     "avatar.update":"dateupay ataravay",
@@ -17,16 +22,24 @@
     "avatar.change.picture":"angekay icturepay",
     "avatar.remove.picture":"moverey icturepay",
     "avatar.frame.explain":"agdray ufstay",
+    "avatar.frame.title":"detay icturepay",
+    "avatar.frame.delete.title":"Delete Photo?",
+    "avatar.frame.delete.explain":"Are you sure you want to permanently delete this photo?",
+    "avatar.delete":"Delete",
     "avatar.frame.cancel":"anselcay"
   },
   "french":{
-    "avatar.update":"Mise à jour Avatar",
-    "avatar.loading":"Chargement Avatar",
+    "avatar.update":"Mise à jour image",
+    "avatar.loading":"Chargement image",
     "avatar.new":"Ajouter une photo",
     "avatar.save":"sauvegarder",
     "avatar.change.picture":"Changer l'image",
     "avatar.remove.picture":"Supprimer l'image",
     "avatar.frame.explain":"Faites glisser pour sélectionner une zone à votre image",
+    "avatar.frame.title":"detay icturepay",
+    "avatar.frame.delete.title":"Delete Photo?",
+    "avatar.frame.delete.explain":"Are you sure you want to permanently delete this photo?",
+    "avatar.delete":"Delete",
     "avatar.frame.cancel":"Annuler"
   },
   "chinese":{
@@ -37,6 +50,10 @@
     "avatar.change.picture":"更改圖片",
     "avatar.remove.picture":"刪除圖片",
     "avatar.frame.explain":"拖動選擇一個區域成為你的圖片",
+    "avatar.frame.title":"detay icturepay",
+    "avatar.frame.delete.title":"Delete Photo?",
+    "avatar.frame.delete.explain":"Are you sure you want to permanently delete this photo?",
+    "avatar.delete":"Delete",
     "avatar.frame.cancel":"取消"
   }
 }

@@ -1,28 +1,76 @@
 <div class="o-avatar_avatar">
 
-  <div class="o-avatar_editor-form">
-    <div class="o-avatar_editor-cropper-message">
-      <h4 class="o-localizable">avatar.frame.explain</h4>
-    </div>
-    <div class="o-avatar_editor-cropper-frame">
-    </div>
-    <a href="#" class="o-localizable o-avatar--cancel-edit pe-btn pe-btn--link pe-btn--large">avatar.frame.cancel</a>
-    <div type="submit" name="submit" class="o-localizable o-avatar--submit-crop pe-btn pe-btn--primary" >
-      avatar.save
-    </div>
+  <div class="o-avatar_delete-form modal">
+    <div class="o-avatar_delete-form-content">
+      <div class="o-avatar_editor-form-head">
+        <span class="o-avatar_editor-title  o-localizable">
+           avatar.frame.delete.title
+        </span >
+        <span class="o-avatar_delete-form-kill">
+          <i class="pe-icon--times" ></i>
+        </span>
+      </div>
+      <div class="o-avatar_cropper-message o-localizable">
+        avatar.frame.delete.explain
+      </div>
 
-    <div class="o-profile--clearfix"></div>
+      <div class="o-avatar_editor-buttons">
+        <span class="o-avatar_editor-buttons-right">
+          <div type="cancel" name="cancel"
+            class="o-localizable o-avatar_delete--cancel-edit pe-btn">
+            avatar.frame.cancel
+          </div>
+          <div type="delete" name="delete"
+            class="o-localizable o-avatar_delete--submit pe-btn pe-btn--primary" >
+            avatar.delete
+          </div>
+          <div class="o-profile--clearfix"></div>
+      </span>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="o-avatar_editor-form modal">
+    <div class="o-avatar_editor-form-content">
+      <div class="o-avatar_editor-form-head">
+        <span class="o-avatar_cropper-title  o-localizable">
+           avatar.frame.title
+        </span >
+        <span class="o-avatar_editor-form-kill">
+          <i class="pe-icon--times" ></i>
+        </span>
+      </div>
+      <div class="o-avatar_cropper-message o-localizable">
+        avatar.frame.explain
+      </div>
+      <div class="o-avatar_editor-cropper-frame"></div>
+      <div class="o-avatar_editor-buttons">
+        <span class="o-avatar_editor-buttons-right">
+          <div type="cancel" name="cancel"
+            class="o-localizable o-avatar--cancel-edit pe-btn">
+            avatar.frame.cancel
+          </div>
+          <div type="submit" name="submit"
+            class="o-localizable o-avatar--submit-crop pe-btn pe-btn--primary" >
+            avatar.save
+          </div>
+          <div class="o-profile--clearfix"></div>
+      </span>
+      </div>
+    </div>
   </div>
 
   <div class="o-avatar_detail-avatar">
-
     <div class="o-loader" style="position: absolute; top: 0px; left: 0px; display: none;">
     </div>
     <img
       class="o-avatar_avatar-image"
       src="https://console.pearson.com/images/e9458be08c02638f73609401880032e24f5bcba2/user.jpg"  />
     <button  class="o-avatar_avatar-msg-button" type="button">
-      <i class="oc-icon-camera" style="font-size: 16px;"></i>
+      <i class="pe-icon--camera" ></i>
       <span class="o-localizable o-avatar_avatar-msg-msg">
         avatar.update
       </span>
@@ -32,14 +80,14 @@
     </div>
   </div>
   <form class='o-avatar_avatar-update-choice'>
-    <div class="o-arrow-up"></div>
-    <div class='o-avatar_avatar-update-change' >
-          <a href="#" style="text-decoration:none; color:blue;"
-          class="o-localizable o-avatar_avatar-update-change-link">avatar.change.picture</a>
+
+    <div class='o-avatar_avatar-update-change  o-avatar_avatar-choice-hover' >
+          <span
+          class="o-localizable o-avatar_avatar-update-change-link ">avatar.change.picture</span>
     </div>
-    <div class='o-avatar_avatar-update-delete'>
-          <a href="#" style="text-decoration:none; color:blue;"
-          class="o-localizable o-avatar_avatar-update-delete-link">avatar.remove.picture</a>
+    <div class='o-avatar_avatar-update-delete  o-avatar_avatar-choice-hover'>
+          <span
+          class="o-localizable o-avatar_avatar-update-delete-link ">avatar.remove.picture</span>
     </div>
     <div class="o-avatar_clearfix"></div>
   </form>
