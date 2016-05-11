@@ -8,7 +8,8 @@ const ImageCropper =require('o-image-cropper').ImageCropper;
 
 const unknownImage = "https://console.pearson.com/images/e9458be08c02638f73609401880032e24f5bcba2/user.jpg"
 const CROPIMAGESIZE = 500;
-const EDITORFORMPADFORBUTTONSHEIGHT = 85;
+const MAXIMAGEWIDTH = 750;
+const EDITORFORMPADFORBUTTONSHEIGHT = 185;
 const EDITORFORMPADFORBUTTONSWIDTH = 25;
 
 
@@ -82,7 +83,6 @@ AvatarView.prototype.addAvatarView = function ( size, isEditable) {
 		this.myElement.querySelector('.o-avatar_avatar-msg-msg').textContent = this.noAvatarMsg;
 	});
 
-
 	let elem =	this.myElement.querySelector(".o-avatar_avatar-update-choice");
 	this.myElement.querySelector(".o-avatar_avatar-msg-button").addEventListener("click", (evt) => {
 		evt.stopPropagation();
@@ -107,9 +107,22 @@ AvatarView.prototype.addAvatarView = function ( size, isEditable) {
 	});
 
 	this.myElement.querySelector(".o-avatar_avatar-update-delete").addEventListener("click", () => {
-		this.removeAvatar();
-		this.myElement.querySelector(".o-avatar_avatar-update-choice").style.display='none';
-	});
+    this.handleDeleteModal();
+  });
+  this.myElement.querySelector(".o-avatar_delete--submit").addEventListener("click", () => {
+    this.handleDeleteSubmit();
+  });
+
+  this.myElement.querySelector(".o-avatar_delete--cancel-edit").addEventListener("click", () => {
+    this.handleDeleteCancel();
+  });
+  this.myElement.querySelector(".o-avatar_delete-form-kill").addEventListener("click", () => {
+    this.handleDeleteCancel();
+  });
+
+  this.myElement.querySelector(".o-avatar_editor-form-kill").addEventListener("click", () => {
+    this.handleEditFormClear();
+  });
 
 	this.myElement.querySelector(".o-avatar--cancel-edit").addEventListener("click", () => {
 		this.handleEditFormClear();
@@ -284,6 +297,21 @@ AvatarView.prototype.removeAvatar = function () {
 	this.service.setProfile(this.profileData.id, JSON.stringify(this.profileData), this.parseUserProfile.bind(this));
 };
 
+AvatarView.prototype.handleDeleteModal = function () {
+  this.myElement.querySelector('.o-avatar_delete-form').style.display = 'block';
+}
+
+AvatarView.prototype.handleDeleteSubmit = function () {
+  this.removeAvatar();
+  this.myElement.querySelector('.o-avatar_delete-form').style.display = 'none';
+  this.myElement.querySelector(".o-avatar_avatar-update-choice").style.display='none';
+}
+
+AvatarView.prototype.handleDeleteCancel = function () {
+  this.myElement.querySelector('.o-avatar_delete-form').style.display = 'none';
+  this.myElement.querySelector(".o-avatar_avatar-update-choice").style.display='none';
+}
+
 // *******************
 AvatarView.prototype.handleEditPicture = function () {
 	// dont show the avatar, only show the cropping tool
@@ -308,7 +336,15 @@ AvatarView.prototype.handleEditPicture = function () {
 
 		self.imageCandidate.onload = function () {
 
-			console.log("loaded image to cropper width, height: ",self.imageCandidateWidth, self.imageCandidateHeight);
+      // this.style.width = 2*CROPIMAGESIZE+"px";
+      console.log("height and width: ",  this.height +" "+  this.width);
+      if(this.width > MAXIMAGEWIDTH){
+        this.style.height = (MAXIMAGEWIDTH / this.width * this.height)+"px";
+        this.style.width = MAXIMAGEWIDTH +"px";
+        console.log("after height and width: ",  this.style.height +" "+ this.style.width);
+      }
+
+
 			let cropper = new ImageCropper(this, {
 				// min_width: 10,
 				// min_height: 10,
@@ -330,8 +366,13 @@ AvatarView.prototype.handleEditPicture = function () {
 			cropper.confine();
 			cropper.crop();
 
-			self.myElement.querySelector('.o-avatar_editor-form').style.width = this.width+EDITORFORMPADFORBUTTONSWIDTH + "px";
-			self.myElement.querySelector('.o-avatar_editor-form').style.height = (this.height+EDITORFORMPADFORBUTTONSHEIGHT) + "px";
+
+
+      // make the form bigger to match the image
+      var formStyle = self.myElement.querySelector('.o-avatar_editor-form-content').style;
+      var imgStyle = self.myElement.querySelector('.o-avatar_cropper-image').style;
+			formStyle.width = this.width+EDITORFORMPADFORBUTTONSWIDTH + "px";
+			formStyle.height = (this.height+imgStyle.height) + "px";
 
 		};// end onload
 		self.imageCandidate.src = e.target.result;
@@ -435,7 +476,7 @@ function Translator(locale) {
   if(! this.translation){
       this.translation = datafile["english"];
   }
-  console.log("translation file", JSON.stringify(this.translation ));
+  // console.log("translation file", JSON.stringify(this.translation ));
 	return this;
 };
 

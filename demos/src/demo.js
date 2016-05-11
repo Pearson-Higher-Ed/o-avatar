@@ -11,17 +11,17 @@ document.addEventListener("DOMContentLoaded", function() {
 	let token = document.getElementById('htmlToken').value;
   let piid = document.getElementById('htmlPIid').value;
 	let url = document.getElementById('htmlURL').value;
- 
+
 	// url is the userprofile service url
 	let service = new UProfileService(url, token);
-
 
 	document.getElementById("refreshButton").addEventListener("click", () => {
 		token = document.getElementById('htmlToken').value;
 	  piid = document.getElementById('htmlPIid').value;
 
 		service.setToken(token);
-		service.setUser(piid);
+		CView.setUser(piid);
+		AView.setUser(piid);
 	});
 
 

@@ -7,11 +7,9 @@
 
 @import 'src/scss/variables';
 @import 'src/scss/mixins';
-@import 'o-image-cropper/main';
-@import 'o-icons/main';
 @import 'node_modules/pearson-elements/scss/elements';
 
-@include oIconsInclude(oc-icons);
+
 
 @if not $o-avatar-is-silent {
 	@include oAvatarHello(world of Origami);
@@ -20,12 +18,10 @@
 .o-avatar_avatar {
 	width: 100px;
 	height: 100px;
-	font: 16px arial, sans-serif;
+	font: 14px helvetica neue, sans-serif;
 }
-.o-avatar_clearfix {
-//	clear: both;
-	overflow: auto;
-}
+
+// the visible avatar
 .o-avatar_detail-avatar {
 	border: solid 1px black;
 	position: relative;
@@ -46,12 +42,154 @@
 	button {
 		margin: 0px;
 	}
+	// this is the hidden input button (it was ugly)
 	input {
 		display: none;
 	}
 }
+
+
+
+// ************** BEGIN avatar_delete Component *****************
+.o-avatar_delete-form-content {
+	position: absolute;
+	left: 20%;
+	top: 20%;
+	display: block;
+	width: 620px;
+	margin-top: 		12px;
+
+	padding-top:  	15px;
+	padding-left: 	0px;
+	padding-right:  0px;
+	padding-bottom: 0px;
+
+	z-index: 10;
+	background-color: white;
+	border: pe-color(sidewalk) 1px;
+
+}
+
+
+// the kill button in the upper corner with the x in it
+.o-avatar_delete-form-kill {
+	padding: 11px;
+	font-size: 24px;
+	position: absolute;
+	right: 0px;
+	top: 13px;
+}
+
+// cancel button
+.o-avatar_delete--cancel-edit {
+	position: relative;
+		right: 11px;
+}
+
+// submit button
+.o-avatar_delete-submit {
+	padding-right: 	11px;
+	padding-left: 	11px;
+}
+// ********* End avatar_delete component ************
+
+
+// ************** BEGIN Cropping Component *****************
+.o-avatar_editor-form-content {
+	position: absolute;
+	left: 0px;
+	display: block;
+	width: 500px;
+	margin-top: 		12px;
+
+	padding-top:  	15px;
+	padding-left: 	0px;
+	padding-right:  0px;
+	padding-bottom: 0px;
+
+	z-index: 10;
+	background-color: white;
+	border: pe-color(sidewalk) 1px;
+
+}
+
+// for details on the image to be cropped (doesn't seem to be used)
+.o-avatar_cropper-image {
+	  height: 200px;
+}
+
+// the friendly message with instructions for the user
+.o-avatar_cropper-message {
+	font-size: 16px;
+	padding: 15px;
+}
+
+// this has the title and the kill button in it
+.o-avatar_editor-form-head {
+	padding: 11px;
+	font-size: 		24px;
+	border-top: 		0 none;
+	border-left: 		0 none;
+	border-right: 	0 none;
+	border-bottom: 	pe-color(sidewalk) 1px;
+	border-style: solid;
+}
+
+// the kill button in the upper corner with the x in it
+.o-avatar_editor-form-kill {
+	padding: 11px;
+	font-size: 24px;
+	position: absolute;
+	right: 0px;
+	top: 13px;
+}
+
+// This is the frame that the cropping image lives in
+.o-avatar_editor-cropper-frame{
+
+	padding-top: 		15px;
+	padding-left: 	15px;
+	padding-right: 	15px;
+	padding-bottom: 15px; 
+
+}
+// the bar with cancel and save
+.o-avatar_editor-buttons {
+	padding: 15px;
+	// position: absolute;
+	border-top: 		pe-color(sidewalk) 1px;
+	border-left: 		0 none;
+	border-right: 	0 none;
+	border-bottom: 	0 none;
+	border-style: solid;
+	  right: 0px;
+	height: 55px;
+}
+
+// a right justified piece for the buttons
+.o-avatar_editor-buttons-right {
+	position: absolute;
+	right: 11px;
+}
+
+// cancel button
+.o-avatar--cancel-edit {
+	position: relative;
+		right: 11px;
+}
+
+// submit button
+.o-avatar--submit-crop {
+	padding-right: 	11px;
+	padding-left: 	11px;
+}
+// ********* End Cropping component ************
+
+
+// ********* BEGIN Update Photo banner and behavior ***********
+//  This is the "update photo" banner
 .o-avatar_avatar-msg-button {
-	background: rgba(0, 0, 0, 0.35);
+	background: rgba(0, 0, 0, 0.50);
 	color: white;
 	// font: 10px arial, sans-serif;
 	position: absolute;
@@ -63,60 +201,8 @@
 	text-align: center;
 	border: none 0px;
 }
-.o-avatar_avatar-edit-button {
-	display: none;
 
-}
-
-.o-avatar_editor-form {
-	position: absolute;
-	left: 0px;
-	border: blue 10px;
-	width: 500px;
-	display: none;
-	margin-top: 12px;
-	background:  pe-color(boring);
-	padding: 12px;
-	// position: relative;
-	border-radius: 6px;
-	box-shadow: 10px 10px 10px grey;
-	z-index: 10;
-}
-
-.o-avatar_cropper-image {
-
-	//  height: 500px;
-}
-
-.o-avatar--cancel-edit {
-	position: absolute;
-  bottom: 8px;
-	left: 20px;
-
-}
-.o-avatar--submit-crop {
-	// display: block;
-	// width: 60px;
-
-	position: absolute;
-  bottom: 8px;
-	right: 20px;
-	// border-radius: 3px;
-	// padding: 6px 12px;
-	// background: blue;
-	// background-color: #0E67A9;
-	// color: #FFF;
-	line-height: 1.42857;
-}
-
-.o-avatar_editor {
-	position: absolute;
-	bottom: center;
-	left: 0px;
-	border: blue 10px;
-	width: 500px;
-	height: 500px;
-}
+// this is the choice menu (hidden to start with)
 .o-avatar_avatar-update-choice {
 //	background: rgba(255, 255, 255, 1.00);
  	text-decoration: none;
@@ -124,49 +210,79 @@
 	align-self: center;
 	color: black;
 	width: 100px;
-	margin-top: 1px;
-	margin-left: auto;
-	margin-right: auto;
-	background: white;
-	padding: 1px;
-	padding-left: 10px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	border-radius: 6px;
+	margin-top: 		0px;
+	margin-left: 		0;
+	margin-right: 	0 ;
+	margin-bottom: 	10px;
+
+	background: pe-color(brightly-lit);
+	padding-top: 		10px;
+	padding-left: 	0;
+	padding-right: 	0;
+	padding-bottom: 10px;
+	// border-radius: 6px;
 	// font: 12px arial, sans-serif;
 	display: none;
 	text-align: center;
-	border-bottom: blue 2px;
+	border:  pe-color(hairline-gray) 2px;
 	overflow: visible;
 	position: relative;
 	z-index: 10;
-	box-shadow: rgba(0, 0, 0, 0.8) 3px 3px 3px 3px;
-}
-.o-arrow-up {
-	position: relative;
-	bottom: 20px;
-	left: 40px;
-	outline: 4px black;
-	width: 0;
-	height: 0;
-	border-left: 20px solid transparent;
-	border-right: 20px solid transparent;
-	border-bottom: 20px solid white;
+	// box-shadow: rgba(0, 0, 0, 0.8) 3px 3px 3px 3px;
 }
 
+//  Choosing to update or delete a photo and hover behavior
+.o-avatar_avatar-choice-hover {
+	margin-left: 	0;
+	margin-right: 0 ;
+	align-content: center;
+	height: 34px;
+	text-align: center;
+	line-height: 34px;
+	color: black;
+	border: blue 2px;
 
+}
+
+.o-avatar_avatar-choice-hover:hover {
+	background:  pe-color(smoke-gray);
+	color: white;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 	100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+}
+// ********* END Update Photo banner and behavior ***********
+
+
+.o-avatar_clearfix {
+//	clear: both;
+	overflow: auto;
+}
+
+//  *********************  Spinner for waiting for Loading image
 .o-loader {
   margin: auto;
   font-size: 10px;
   position: relative;
   text-indent: -9999em;
-  border-top: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-top: 	1.1em solid rgba(255, 255, 255, 0.2);
   border-right: 1.1em solid rgba(255, 255, 255, 0.2);
   border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
   border-left: 1.1em solid #107aca;
   transform: translateZ(0);
   animation: load8 1.1s infinite linear;
 }
+
 .o-loader,
 .o-loader:after {
   border-radius: 50%;
@@ -181,4 +297,20 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+.cropper {
+    position: relative;
+    cursor: move;
+}
+.cropper-area-handle {
+    width: 12px;
+    height: 12px;
+		// border-radius: 0%;
+    background: yellow;
+}
+.cropper-overlay {
+    background: black;
+    opacity: 0.5;
+    filter: alpha(opacity = 50);
 }
