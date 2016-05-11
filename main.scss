@@ -10,6 +10,7 @@
 @import 'node_modules/pearson-elements/scss/elements';
 
 
+
 @if not $o-avatar-is-silent {
 	@include oAvatarHello(world of Origami);
 }
@@ -149,9 +150,7 @@
 	padding-top: 		15px;
 	padding-left: 	15px;
 	padding-right: 	15px;
-	padding-bottom: 15px;
-	cropimagesize: 500;
-	cropimagemaxwidth: 750;
+	padding-bottom: 15px; 
 
 }
 // the bar with cancel and save
