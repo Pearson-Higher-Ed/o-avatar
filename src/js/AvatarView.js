@@ -1,5 +1,6 @@
 // "use strict";
 
+const requireText = requre('require-text');
 const view = requireText("../html/AvatarView.html");
 const translation = requireText("../translation/translations.json");
 const UProfileService = require("o-profile-service/main").UserProfileService;
