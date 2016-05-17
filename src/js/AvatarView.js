@@ -2,8 +2,8 @@
 
 const view = requireText("../html/AvatarView.html");
 const translation = requireText("../translation/translations.json");
-const UProfileService = require("o-profile-service").UserProfileService;
-const ImageCropper =require('o-image-cropper').ImageCropper;
+const UProfileService = require("o-profile-service/main").UserProfileService;
+const ImageCropper =require('o-image-cropper/main').ImageCropper;
 
 
 const unknownImage = "https://console.pearson.com/images/e9458be08c02638f73609401880032e24f5bcba2/user.jpg"
