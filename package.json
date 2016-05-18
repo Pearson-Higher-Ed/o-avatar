@@ -24,10 +24,10 @@
     "webpack": "^1.12.2"
   },
   "dependencies": {
+    "html-loader": "^0.4.3",
     "o-image-cropper": "git+https://github.com/Pearson-Higher-Ed/o-image-cropper.git",
     "o-profile-service": "git+https://github.com/Pearson-Higher-Ed/o-profile-service.git",
     "o-xhr": "git+https://github.com/Pearson-Higher-Ed/o-xhr.git",
-    "pearson-elements": "^0.1.2",
-    "require-text": "0.0.1"
+    "pearson-elements": "^0.1.2"
   }
 }
