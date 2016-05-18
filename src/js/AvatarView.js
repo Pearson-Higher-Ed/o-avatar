@@ -1,7 +1,7 @@
 // "use strict";
 
-const view = requireText("html!../html/AvatarView.html");
-const translation = requireText("html!../translation/translations.json");
+const view = require("html!../html/AvatarView.html");
+const translation = require("html!../translation/translations.json");
 const UProfileService = require("o-profile-service/main").UserProfileService;
 const ImageCropper =require('o-image-cropper/main').ImageCropper;
 
